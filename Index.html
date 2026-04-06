@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Senthil Nathan A — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --cyan: #00E5FF;
+    --cyan2: #00B8D4;
+    --cyan-dim: rgba(0,229,255,0.08);
+    --bg: #050810;
+    --bg2: #0A0F1E;
+    --bg3: #0D1426;
+    --text: #E0F7FA;
+    --muted: #546E7A;
+    --card: #0D1426;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* CANVAS BG */
+  #bgCanvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0; pointer-events: none;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 60px;
+    background: rgba(5,8,16,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,229,255,0.1);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px; color: var(--cyan); letter-spacing: 3px;
+  }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+
+  /* SECTIONS */
+  section {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 120px 60px 80px;
+  }
+
+  /* HERO */
+  #hero {
+    text-align: center;
+    background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(0,229,255,0.06) 0%, transparent 70%);
+  }
+  .hero-tag {
+    display: inline-block;
+    border: 1px solid rgba(0,229,255,0.3);
+    color: var(--cyan); font-size: 11px;
+    letter-spacing: 4px; text-transform: uppercase;
+    padding: 7px 20px; border-radius: 30px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 12vw, 140px);
+    line-height: 0.9; color: #fff;
+    animation: fadeUp 0.9s 0.1s ease both;
+  }
+  .hero-name span { color: var(--cyan); }
+  .hero-sub {
+    font-size: 14px; color: var(--muted);
+    letter-spacing: 4px; text-transform: uppercase;
+    margin-top: 20px; font-weight: 300;
+    animation: fadeUp 1s 0.2s ease both;
+  }
+  .hero-exp {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--cyan-dim); border: 1px solid rgba(0,229,255,0.2);
+    padding: 10px 24px; border-radius: 30px;
+    margin-top: 32px; font-size: 13px; color: var(--cyan);
+    animation: fadeUp 1.1s 0.3s ease both;
+  }
+  .hero-exp::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); animation: pulse 1.5s infinite; }
+  .hero-btns {
+    display: flex; gap: 16px; justify-content: center;
+    margin-top: 44px;
+    animation: fadeUp 1.2s 0.4s ease both;
+  }
+  .btn-primary {
+    background: var(--cyan); color: #050810;
+    padding: 14px 36px; border-radius: 4px;
+    font-size: 12px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,229,255,0.3); }
+  .btn-outline {
+    border: 1px solid rgba(0,229,255,0.3); color: var(--cyan);
+    padding: 14px 36px; border-radius: 4px;
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .btn-outline:hover { background: var(--cyan-dim); }
+
+  /* SCROLL INDICATOR */
+  .scroll-ind {
+    position: absolute; bottom: 36px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    animation: fadeUp 1.5s 0.6s ease both;
+  }
+  .scroll-ind span { font-size: 10px; letter-spacing: 3px; color: var(--muted); }
+  .scroll-line { width: 1px; height: 50px; background: linear-gradient(to bottom, var(--cyan), transparent); animation: scrollLine 1.5s infinite; }
+
+  /* SECTION TITLE */
+  .sec-header { text-align: center; margin-bottom: 60px; }
+  .sec-label { font-size: 10px; letter-spacing: 4px; color: var(--cyan); text-transform: uppercase; margin-bottom: 12px; }
+  .sec-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 6vw, 72px);
+    color: #fff; letter-spacing: 2px;
+  }
+  .sec-title span { color: var(--cyan); }
+  .sec-line { width: 60px; height: 2px; background: var(--cyan); margin: 16px auto 0; }
+
+  /* ABOUT */
+  #about { background: var(--bg2); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; max-width: 1000px; width: 100%;
+    align-items: center;
+  }
+  .about-text p { font-size: 14px; color: #90A4AE; line-height: 1.9; margin-bottom: 20px; }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
+  .stat-box {
+    background: var(--cyan-dim); border: 1px solid rgba(0,229,255,0.15);
+    border-radius: 8px; padding: 20px; text-align: center;
+  }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 44px; color: var(--cyan); line-height: 1; }
+  .stat-label { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 6px; }
+  .about-contact { display: flex; flex-direction: column; gap: 14px; }
+  .contact-row {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--bg3); border: 1px solid #1A2744;
+    border-radius: 8px; padding: 16px 20px;
+    transition: border-color 0.3s, transform 0.2s;
+  }
+  .contact-row:hover { border-color: rgba(0,229,255,0.3); transform: translateX(6px); }
+  .contact-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--cyan-dim); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .contact-icon svg { width: 16px; height: 16px; fill: var(--cyan); }
+  .contact-info label { font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 2px; }
+  .contact-info span { font-size: 13px; color: var(--text); }
+
+  /* SKILLS — FLIP CARDS */
+  #skills { background: var(--bg); }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px; max-width: 1100px; width: 100%;
+  }
+  .flip-card { height: 180px; perspective: 1000px; cursor: pointer; }
+  .flip-inner {
+    position: relative; width: 100%; height: 100%;
+    transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
+    transform-style: preserve-3d;
+  }
+  .flip-card:hover .flip-inner { transform: rotateY(180deg); }
+  .flip-front, .flip-back {
+    position: absolute; width: 100%; height: 100%;
+    backface-visibility: hidden; border-radius: 10px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .flip-front {
+    background: var(--bg3);
+    border: 1px solid #1A2744;
+  }
+  .flip-front .f-icon { font-size: 36px; margin-bottom: 12px; }
+  .flip-front .f-name { font-size: 14px; font-weight: 600; color: #fff; text-align: center; }
+  .flip-front .f-cat { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+  .flip-back {
+    background: linear-gradient(135deg, rgba(0,229,255,0.12), rgba(0,184,212,0.06));
+    border: 1px solid rgba(0,229,255,0.3);
+    transform: rotateY(180deg);
+  }
+  .flip-back .b-pct { font-family: 'Bebas Neue', sans-serif; font-size: 56px; color: var(--cyan); line-height: 1; }
+  .flip-back .b-bar { width: 100%; height: 4px; background: rgba(0,229,255,0.15); border-radius: 2px; margin: 10px 0; overflow: hidden; }
+  .flip-back .b-fill { height: 100%; background: linear-gradient(90deg, var(--cyan), var(--cyan2)); border-radius: 2px; }
+  .flip-back .b-label { font-size: 11px; color: var(--cyan); letter-spacing: 1px; }
+
+  /* EXPERIENCE */
+  #experience { background: var(--bg2); }
+  .exp-timeline { max-width: 800px; width: 100%; position: relative; }
+  .exp-timeline::before {
+    content: ''; position: absolute; left: 20px; top: 0; bottom: 0;
+    width: 1px; background: linear-gradient(to bottom, var(--cyan), transparent);
+  }
+  .exp-item {
+    display: flex; gap: 40px; margin-bottom: 40px;
+    opacity: 0; transform: translateX(-30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .exp-item.visible { opacity: 1; transform: translateX(0); }
+  .exp-dot {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--cyan-dim); border: 2px solid var(--cyan);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; position: relative; z-index: 1;
+    font-size: 16px;
+  }
+  .exp-content {
+    background: var(--bg3); border: 1px solid #1A2744;
+    border-radius: 10px; padding: 24px 28px; flex: 1;
+    border-left: 3px solid var(--cyan);
+    transition: border-color 0.3s, transform 0.2s;
+  }
+  .exp-content:hover { border-left-color: #00E5FF; transform: translateX(6px); }
+  .exp-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+  .exp-role { font-size: 15px; font-weight: 600; color: #fff; }
+  .exp-date-badge { background: var(--cyan-dim); border: 1px solid rgba(0,229,255,0.2); color: var(--cyan); font-size: 10px; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+  .exp-company { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+  .exp-content ul { padding-left: 18px; }
+  .exp-content li { font-size: 12px; color: #78909C; line-height: 1.8; margin-bottom: 4px; }
+
+  /* CERTIFICATIONS — flip style */
+  #certifications { background: var(--bg); }
+  .cert-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px; max-width: 1000px; width: 100%;
+  }
+  .cert-flip { height: 160px; perspective: 1000px; cursor: pointer; }
+  .cert-inner {
+    position: relative; width: 100%; height: 100%;
+    transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
+    transform-style: preserve-3d;
+  }
+  .cert-flip:hover .cert-inner { transform: rotateY(180deg); }
+  .cert-front, .cert-back {
+    position: absolute; width: 100%; height: 100%;
+    backface-visibility: hidden; border-radius: 10px;
+    padding: 20px; display: flex; flex-direction: column; justify-content: center;
+  }
+  .cert-front { background: var(--bg3); border: 1px solid #1A2744; }
+  .cert-front .cf-icon { font-size: 28px; margin-bottom: 10px; }
+  .cert-front .cf-name { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .cert-front .cf-issuer { font-size: 10px; color: var(--muted); }
+  .cert-back {
+    background: linear-gradient(135deg, rgba(0,229,255,0.1), rgba(0,184,212,0.05));
+    border: 1px solid rgba(0,229,255,0.3);
+    transform: rotateY(180deg); text-align: center; align-items: center;
+  }
+  .cert-back .cb-year { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--cyan); line-height: 1; }
+  .cert-back .cb-label { font-size: 11px; color: var(--muted); margin-top: 6px; letter-spacing: 1px; }
+  .cert-back .cb-badge { display: inline-block; background: var(--cyan); color: #050810; font-size: 10px; font-weight: 600; padding: 4px 14px; border-radius: 20px; margin-top: 10px; letter-spacing: 1px; }
+
+  /* EDUCATION */
+  #education { background: var(--bg2); }
+  .edu-cards { display: flex; flex-direction: column; gap: 20px; max-width: 800px; width: 100%; }
+  .edu-card {
+    background: var(--bg3); border: 1px solid #1A2744;
+    border-radius: 10px; padding: 24px 28px;
+    display: flex; justify-content: space-between; align-items: center;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s;
+  }
+  .edu-card.visible { opacity: 1; transform: translateY(0); }
+  .edu-card:hover { border-color: rgba(0,229,255,0.3); }
+  .edu-left .edu-deg { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .edu-left .edu-sch { font-size: 12px; color: var(--muted); }
+  .edu-right { text-align: right; }
+  .edu-score { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--cyan); line-height: 1; }
+  .edu-year { font-size: 10px; color: var(--muted); letter-spacing: 2px; }
+
+  /* TRAINING FOCUS */
+  #training { background: var(--bg); }
+  .training-wrap { max-width: 900px; width: 100%; }
+  .train-cat { margin-bottom: 32px; }
+  .train-cat-title { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--cyan); margin-bottom: 14px; }
+  .tags-wrap { display: flex; flex-wrap: wrap; gap: 10px; }
+  .train-tag {
+    font-size: 12px; padding: 8px 18px; border-radius: 4px;
+    font-weight: 500; cursor: default;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .train-tag:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,229,255,0.2); }
+  .train-tag.cad { background: rgba(0,229,255,0.08); color: var(--cyan); border: 1px solid rgba(0,229,255,0.2); }
+  .train-tag.design { background: rgba(100,200,150,0.08); color: #80CBC4; border: 1px solid rgba(100,200,150,0.2); }
+  .train-tag.cloud { background: rgba(167,139,250,0.08); color: #CE93D8; border: 1px solid rgba(167,139,250,0.2); }
+  .train-tag.soft { background: rgba(255,183,77,0.08); color: #FFB74D; border: 1px solid rgba(255,183,77,0.2); }
+
+  /* FOOTER */
+  footer {
+    position: relative; z-index: 1;
+    text-align: center; padding: 60px;
+    border-top: 1px solid #0D1426;
+    background: var(--bg);
+  }
+  footer .f-name { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--cyan); letter-spacing: 4px; }
+  footer p { font-size: 12px; color: var(--muted); margin-top: 10px; letter-spacing: 2px; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  @keyframes scrollLine { 0% { opacity: 0; transform: scaleY(0); transform-origin: top; } 50% { opacity: 1; transform: scaleY(1); } 100% { opacity: 0; transform: scaleY(1); transform-origin: bottom; } }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { gap: 16px; }
+    section { padding: 100px 24px 60px; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .hero-name { font-size: 60px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">SN</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#experience">Experience</a>
+    <a href="#certifications">Certs</a>
+    <a href="#education">Education</a>
+    <a href="#training">Training</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-tag">Corporate Trainer &amp; Mechanical Engineer</div>
+  <h1 class="hero-name">SENTHIL<br><span>NATHAN</span> A</h1>
+  <div class="hero-sub">CAD / CAM &nbsp;·&nbsp; Automotive Design &nbsp;·&nbsp; Cloud Tech</div>
+  <div class="hero-exp">7 Years Training Experience</div>
+  <div class="hero-btns">
+    <a href="#experience" class="btn-primary">View Experience</a>
+    <a href="#skills" class="btn-outline">My Skills</a>
+  </div>
+  <div class="scroll-ind">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="sec-header reveal">
+    <div class="sec-label">Who I Am</div>
+    <div class="sec-title">ABOUT <span>ME</span></div>
+    <div class="sec-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>Dynamic Corporate Trainer and Mechanical Engineer with 7 years of hands-on training experience in CAD/CAM tools and automotive design. I specialize in delivering industry-relevant, project-based training to engineering professionals and students.</p>
+      <p>Certified by Dassault Systemes, Autodesk, and AWS. Passionate about bridging the gap between academic knowledge and industry expectations through practical, engaging training methodologies.</p>
+      <div class="about-stats">
+        <div class="stat-box">
+          <div class="stat-num">7+</div>
+          <div class="stat-label">Years Training</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">15+</div>
+          <div class="stat-label">Tools Taught</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">5</div>
+          <div class="stat-label">Certifications</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">2</div>
+          <div class="stat-label">Job Roles</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-contact reveal">
+      <div class="contact-row">
+        <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+        <div class="contact-info"><label>Email</label><span>senthilnathan148@gmail.com</span></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.91 15.91 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.5 11.5 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1C10.57 21 3 13.43 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.01l-2.21 2.21z"/></svg></div>
+        <div class="contact-info"><label>Phone</label><span>+91 8220455877</span></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/></svg></div>
+        <div class="contact-info"><label>Location</label><span>Pondicherry, Tamil Nadu</span></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></div>
+        <div class="contact-info"><label>LinkedIn</label><span>linkedin.com/in/Senthil-nathan/</span></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M12 3C7 3 3 7 3 12s4 9 9 9 9-4 9-9-4-9-9-9zm0 16a7 7 0 110-14 7 7 0 010 14zm.5-11H11v6l5.25 3.15.75-1.23-4.5-2.67V8z"/></svg></div>
+        <div class="contact-info"><label>DOB</label><span>08 October 1994</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="sec-header reveal">
+    <div class="sec-label">What I Know</div>
+    <div class="sec-title">POWER <span>SKILLS</span></div>
+    <div class="sec-line"></div>
+    <p style="font-size:12px;color:#546E7A;margin-top:14px;letter-spacing:1px;">Hover on each card to see proficiency</p>
+  </div>
+  <div class="skills-grid reveal">
+    <div class="flip-card"><div class="flip-inner"><div class="flip-front"><div class="f-icon">⚙️</div><div class="f-name">SolidWorks</div><div class="f-cat">CAD</div></div><div class="flip-back"><div class="b-pct">92%</div><div class="b-bar"><div class="b-fill" style="width:92%"></div></div><div class="b-label">Expert Level</div></div></div></div>
+    <div class="flip-card"><div class="flip-inner"><div class="flip-front"><div class="f-icon">🖥️</div><div class="f-name">AutoCAD</div><div class="f-cat">CAD</div></div><div class="flip-back"><div class="b-pct">90%</div><div class="b-bar"><div class="b-fill" style="width:90%"></div></div><div class="b-label">Expert Level</div></div></div></div>
+    <div class="flip-card"><div class="flip-inner"><div class="flip-front"><div class="f-icon">🚗</div><div class="f-name">CATIA V5</div><div class="f-cat">CAD / BIW</div></div><div class="flip-back"><div class="b-pct">88%</div><div class="b-bar"><div class="b-fill" style="width:88%"></div></div><div class="b-label">Advanced</div></div></div></div>
+    <div class="flip-card"><div class="flip-inner"><div class="flip-front"><div class="f-icon">📊</div><div class="f-name">Excel Expert</div><div class="f-cat">Productivity</div></div><div class="flip-back"><div class="b-pct">82%</div><div class="b-bar"><div class="b-fill" style="width:82%"></div></div><div class="b-label">Advanced</div></div></div></div>
+    <div class="flip-card"><div class="flip-inner"><div class="flip-front"><div class="f-icon">🔩</div><div class="f-name">Fusion 360</div><div class="f-cat">CAD</div></div><div class="flip-back"><div class="b-pct">78%</div><div class="b-bar"><div class="b-fill" style="width:78%"></div></div><div class="b-label">Proficient</div></div></div></div>
+    <div class="flip-card"><div class="flip-inner"><div class="flip-front"><div class="f-icon">🏗️</div><div class="f-name">Creo</div><div class="f-cat">CAD</div></div><div class="flip-back"><div class="b-pct">75%</div><div class="b-bar"><div class="b-fill" style="width:75%"></div></div><div class="b-label">Proficient</div></div></div></div>
+    <div class="flip-card"><div class="flip-inner"><div class="flip-front"><div class="f-icon">🎨</div><div class="f-name">Photoshop</div><div class="f-cat">Design</div></div><div class="flip-back"><div class="b-pct">70%</div><div class="b-bar"><div class="b-fill" style="width:70%"></div></div><div class="b-label">Proficient</div></div></div></div>
+    <div class="flip-card"><div class="flip-inner"><div class="flip-front"><div class="f-icon">☁️</div><div class="f-name">AWS Cloud</div><div class="f-cat">Cloud</div></div><div class="flip-back"><div class="b-pct">68%</div><div class="b-bar"><div class="b-fill" style="width:68%"></div></div><div class="b-label">Intermediate</div></div></div></div>
+    <div class="flip-card"><div class="flip-inner"><div class="flip-front"><div class="f-icon">🔧</div><div class="f-name">Inventor</div><div class="f-cat">CAD</div></div><div class="flip-back"><div class="b-pct">72%</div><div class="b-bar"><div class="b-fill" style="width:72%"></div></div><div class="b-label">Proficient</div></div></div></div>
+    <div class="flip-card"><div class="flip-inner"><div class="flip-front"><div class="f-icon">📱</div><div class="f-name">Android / IoT</div><div class="f-cat">Tech</div></div><div class="flip-back"><div class="b-pct">62%</div><div class="b-bar"><div class="b-fill" style="width:62%"></div></div><div class="b-label">Intermediate</div></div></div></div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="sec-header reveal">
+    <div class="sec-label">My Journey</div>
+    <div class="sec-title">WORK <span>EXPERIENCE</span></div>
+    <div class="sec-line"></div>
+  </div>
+  <div class="exp-timeline">
+    <div class="exp-item">
+      <div class="exp-dot">🎓</div>
+      <div class="exp-content">
+        <div class="exp-head">
+          <div class="exp-role">Corporate Trainer — CAD/CAM & Design Software</div>
+          <div class="exp-date-badge">7 Years</div>
+        </div>
+        <div class="exp-company">Institute of Industrial Design & Corporate Training, Pondicherry</div>
+        <ul>
+          <li>Delivered training in SolidWorks, CATIA V5, AutoCAD, Creo, Fusion 360 and Inventor to engineering professionals.</li>
+          <li>Trained participants in AWS Cloud Foundations, IoT basics, and Android Studio development.</li>
+          <li>Mentored learners in BIW design, Alias Surface, Clay Modelling, Digital Sketching, and Reverse Engineering.</li>
+          <li>Delivered Excel Expert and Adobe Photoshop sessions for design and data professionals.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-dot">📐</div>
+      <div class="exp-content">
+        <div class="exp-head">
+          <div class="exp-role">Junior Engineer — AutoCAD Structural Drafting</div>
+          <div class="exp-date-badge">Feb 2021 – Jul 2022</div>
+        </div>
+        <div class="exp-company">ASE Structure Design Pvt. Ltd., Chennai</div>
+        <ul>
+          <li>Prepared complete site drawings for telecom tower and antenna installations using AutoCAD.</li>
+          <li>Modified existing structural drawings to accommodate technology upgrades.</li>
+          <li>Performed radiation zone analysis for proposed telecom sites ensuring public safety compliance.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="sec-header reveal">
+    <div class="sec-label">Credentials</div>
+    <div class="sec-title">CERTIFI<span>CATIONS</span></div>
+    <div class="sec-line"></div>
+    <p style="font-size:12px;color:#546E7A;margin-top:14px;letter-spacing:1px;">Hover to see year</p>
+  </div>
+  <div class="cert-grid reveal">
+    <div class="cert-flip"><div class="cert-inner">
+      <div class="cert-front"><div class="cf-icon">⚙️</div><div class="cf-name">Proficient in SolidWorks</div><div class="cf-issuer">Dassault Systemes</div></div>
+      <div class="cert-back"><div class="cb-year">2022</div><div class="cb-label">Dassault Systemes</div><div class="cb-badge">Certified</div></div>
+    </div></div>
+    <div class="cert-flip"><div class="cert-inner">
+      <div class="cert-front"><div class="cf-icon">🏗️</div><div class="cf-name">Proficient in Revit MEP</div><div class="cf-issuer">Autodesk</div></div>
+      <div class="cert-back"><div class="cb-year">2022</div><div class="cb-label">Autodesk</div><div class="cb-badge">Certified</div></div>
+    </div></div>
+    <div class="cert-flip"><div class="cert-inner">
+      <div class="cert-front"><div class="cf-icon">🚗</div><div class="cf-name">Master in Auto Body Design</div><div class="cf-issuer">Dassault / Autodesk</div></div>
+      <div class="cert-back"><div class="cb-year">2022</div><div class="cb-label">Dassault & Autodesk</div><div class="cb-badge">Master Cert</div></div>
+    </div></div>
+    <div class="cert-flip"><div class="cert-inner">
+      <div class="cert-front"><div class="cf-icon">☁️</div><div class="cf-name">AWS Academy Cloud Foundations</div><div class="cf-issuer">Amazon Web Services</div></div>
+      <div class="cert-back"><div class="cb-year">2025</div><div class="cb-label">Amazon Web Services</div><div class="cb-badge">Global Cert</div></div>
+    </div></div>
+    <div class="cert-flip"><div class="cert-inner">
+      <div class="cert-front"><div class="cf-icon">📐</div><div class="cf-name">AutoCAD Certified Professional</div><div class="cf-issuer">Autodesk</div></div>
+      <div class="cert-back"><div class="cb-year">Global</div><div class="cb-label">Autodesk</div><div class="cb-badge">Certified</div></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="sec-header reveal">
+    <div class="sec-label">Academic Background</div>
+    <div class="sec-title">EDU<span>CATION</span></div>
+    <div class="sec-line"></div>
+  </div>
+  <div class="edu-cards">
+    <div class="edu-card">
+      <div class="edu-left">
+        <div class="edu-deg">B.E. Mechanical Engineering</div>
+        <div class="edu-sch">Kings College of Engineering, Thanjavur &nbsp;|&nbsp; Anna University Chennai</div>
+      </div>
+      <div class="edu-right">
+        <div class="edu-score">6.40</div>
+        <div class="edu-year">CGPA &nbsp;·&nbsp; 2017</div>
+      </div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-left">
+        <div class="edu-deg">Higher Secondary (XII)</div>
+        <div class="edu-sch">Sowdambikaa Mat. Hr. Sec. School, Thuraiyur &nbsp;|&nbsp; State Board</div>
+      </div>
+      <div class="edu-right">
+        <div class="edu-score">68%</div>
+        <div class="edu-year">2013</div>
+      </div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-left">
+        <div class="edu-deg">Secondary (X)</div>
+        <div class="edu-sch">Govt. Boys Hr. Sec. School, Aranthangi &nbsp;|&nbsp; State Board</div>
+      </div>
+      <div class="edu-right">
+        <div class="edu-score">66%</div>
+        <div class="edu-year">2010</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINING FOCUS -->
+<section id="training">
+  <div class="sec-header reveal">
+    <div class="sec-label">What I Teach</div>
+    <div class="sec-title">TRAINING <span>FOCUS</span></div>
+    <div class="sec-line"></div>
+  </div>
+  <div class="training-wrap reveal">
+    <div class="train-cat">
+      <div class="train-cat-title">CAD / CAM Tools</div>
+      <div class="tags-wrap">
+        <span class="train-tag cad">SolidWorks</span>
+        <span class="train-tag cad">CATIA V5</span>
+        <span class="train-tag cad">AutoCAD</span>
+        <span class="train-tag cad">Creo</span>
+        <span class="train-tag cad">Fusion 360</span>
+        <span class="train-tag cad">Inventor</span>
+      </div>
+    </div>
+    <div class="train-cat">
+      <div class="train-cat-title">Design & Engineering</div>
+      <div class="tags-wrap">
+        <span class="train-tag design">Body In White</span>
+        <span class="train-tag design">Reverse Engineering</span>
+        <span class="train-tag design">Clay Modelling</span>
+        <span class="train-tag design">Alias Surface</span>
+        <span class="train-tag design">Digital Sketching</span>
+      </div>
+    </div>
+    <div class="train-cat">
+      <div class="train-cat-title">Cloud & Tech</div>
+      <div class="tags-wrap">
+        <span class="train-tag cloud">AWS Cloud</span>
+        <span class="train-tag cloud">IoT</span>
+        <span class="train-tag cloud">Android Studio</span>
+      </div>
+    </div>
+    <div class="train-cat">
+      <div class="train-cat-title">Software & Productivity</div>
+      <div class="tags-wrap">
+        <span class="train-tag soft">Adobe Photoshop</span>
+        <span class="train-tag soft">Excel Expert</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-name">SENTHIL NATHAN A</div>
+  <p>Corporate Trainer &nbsp;·&nbsp; Mechanical Engineer &nbsp;·&nbsp; Pondicherry</p>
+  <p style="margin-top:6px;">senthilnathan148@gmail.com &nbsp;·&nbsp; +91 8220455877</p>
+</footer>
+
+<script>
+// CANVAS PARTICLES
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.r = Math.random() * 1.5 + 0.3;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.alpha = Math.random() * 0.5 + 0.1;
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(0,229,255,${this.alpha})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+function drawConnections() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 100) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(0,229,255,${0.06 * (1 - dist/100)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawConnections();
+  requestAnimationFrame(animate);
+}
+animate();
+
+// SCROLL REVEAL
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal, .exp-item, .edu-card').forEach(el => observer.observe(el));
+
+// STAGGER exp items
+document.querySelectorAll('.exp-item').forEach((el, i) => {
+  el.style.transitionDelay = `${i * 0.15}s`;
+});
+document.querySelectorAll('.edu-card').forEach((el, i) => {
+  el.style.transitionDelay = `${i * 0.1}s`;
+});
+</script>
+</body>
+</html>
